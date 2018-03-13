@@ -180,6 +180,7 @@ extra["compilerModules"] = arrayOf(
         ":compiler:conditional-preprocessor",
         ":compiler:resolution",
         ":compiler:serialization",
+        ":compiler:psi",
         ":compiler:frontend",
         ":compiler:frontend.java",
         ":compiler:frontend.script",
