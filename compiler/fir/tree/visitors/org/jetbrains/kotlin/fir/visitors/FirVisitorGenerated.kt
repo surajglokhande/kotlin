@@ -165,4 +165,8 @@ abstract class FirVisitor<R, D> {
         return visitTypeProjection(starProjection, data)
     }
 
+    open fun visitTypeProjectionWithVariance(typeProjectionWithVariance: FirTypeProjectionWithVariance, data: D): R {
+        return visitTypeProjection(typeProjectionWithVariance, data)
+    }
+
 }

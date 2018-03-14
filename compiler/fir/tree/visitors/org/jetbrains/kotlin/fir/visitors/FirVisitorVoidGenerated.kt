@@ -165,6 +165,10 @@ abstract class FirVisitorVoid : FirVisitor<Unit, Nothing?>() {
         visitTypeProjection(starProjection, null)
     }
 
+    open fun visitTypeProjectionWithVariance(typeProjectionWithVariance: FirTypeProjectionWithVariance) {
+        visitTypeProjection(typeProjectionWithVariance, null)
+    }
+
     final override fun visitDeclarationWithBody(declarationWithBody: FirDeclarationWithBody, data: Nothing?) {
         visitDeclarationWithBody(declarationWithBody)
     }
