@@ -13123,6 +13123,12 @@ public class BlackBoxCodegenTestGenerated extends AbstractBlackBoxCodegenTest {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/multiplatform/defaultArguments/inlineFunctionWithDefaultLambda.kt");
                 doTest(fileName);
             }
+
+            @TestMetadata("kt23239.kt")
+            public void testKt23239() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/multiplatform/defaultArguments/kt23239.kt");
+                doTest(fileName);
+            }
         }
     }
 
