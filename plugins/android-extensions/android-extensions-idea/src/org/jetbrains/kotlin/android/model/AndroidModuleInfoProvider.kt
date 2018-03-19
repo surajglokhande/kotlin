@@ -5,7 +5,7 @@
 
 package org.jetbrains.kotlin.android.model
 
-import com.intellij.openapi.application.runReadAction
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.extensions.Extensions
 import com.intellij.openapi.module.Module
@@ -27,7 +27,9 @@ interface AndroidModuleInfoProvider {
         }
 
         fun getInstance(element: PsiElement): AndroidModuleInfoProvider? {
-            val module = runReadAction { ModuleUtilCore.findModuleForPsiElement(element) } ?: return null
+            val module = ApplicationManager.getApplication().runReadAction<Module> {
+                ModuleUtilCore.findModuleForPsiElement(element)
+            }
             return getInstance(module)
         }
     }
