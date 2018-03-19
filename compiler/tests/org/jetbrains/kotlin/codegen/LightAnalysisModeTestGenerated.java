@@ -13118,6 +13118,18 @@ public class LightAnalysisModeTestGenerated extends AbstractLightAnalysisModeTes
                 doTest(fileName);
             }
 
+            @TestMetadata("inheritedFromExpectedMethod.kt")
+            public void testInheritedFromExpectedMethod() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/multiplatform/defaultArguments/inheritedFromExpectedMethod.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("inheritedInExpectedDeclarations.kt")
+            public void testInheritedInExpectedDeclarations() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/multiplatform/defaultArguments/inheritedInExpectedDeclarations.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("inlineFunctionWithDefaultLambda.kt")
             public void testInlineFunctionWithDefaultLambda() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/multiplatform/defaultArguments/inlineFunctionWithDefaultLambda.kt");

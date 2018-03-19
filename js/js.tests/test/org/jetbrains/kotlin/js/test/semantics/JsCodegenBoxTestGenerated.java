@@ -7262,7 +7262,7 @@ public class JsCodegenBoxTestGenerated extends AbstractJsCodegenBoxTest {
                 catch (Throwable ignore) {
                     return;
                 }
-                throw new AssertionError("Looks like this test can be unmuted. Remove IGNORE_BACKEND directive for that.");
+                throw new AssertionError("Looks like this test can be unmuted. Remove IGNORE_BACKEND directive or add it to whitelist for that.");
             }
 
             @TestMetadata("inlineWithStateMachine.kt")
@@ -14165,6 +14165,18 @@ public class JsCodegenBoxTestGenerated extends AbstractJsCodegenBoxTest {
             @TestMetadata("inheritedFromExpectedClass.kt")
             public void testInheritedFromExpectedClass() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/multiplatform/defaultArguments/inheritedFromExpectedClass.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("inheritedFromExpectedMethod.kt")
+            public void testInheritedFromExpectedMethod() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/multiplatform/defaultArguments/inheritedFromExpectedMethod.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("inheritedInExpectedDeclarations.kt")
+            public void testInheritedInExpectedDeclarations() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/multiplatform/defaultArguments/inheritedInExpectedDeclarations.kt");
                 doTest(fileName);
             }
 
