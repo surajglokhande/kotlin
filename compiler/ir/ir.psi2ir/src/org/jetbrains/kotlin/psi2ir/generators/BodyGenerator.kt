@@ -142,8 +142,9 @@ class BodyGenerator(
         val delegatingConstructorResolvedCall = getResolvedCall(ktDelegatingConstructorCall)
 
         if (delegatingConstructorResolvedCall == null) {
-            if (constructorDescriptor.containingDeclaration.kind == ClassKind.ENUM_CLASS) {
-                generateEnumSuperConstructorCall(irBlockBody, ktConstructor)
+            val classDescriptor = constructorDescriptor.containingDeclaration
+            if (classDescriptor.kind == ClassKind.ENUM_CLASS) {
+                generateEnumSuperConstructorCall(irBlockBody, ktConstructor, classDescriptor)
             } else {
                 generateAnySuperConstructorCall(irBlockBody, ktConstructor)
             }
@@ -207,12 +208,14 @@ class BodyGenerator(
         val classDescriptor = getOrFail(BindingContext.CLASS, ktClassOrObject)
 
         when (classDescriptor.kind) {
-            ClassKind.ENUM_CLASS -> {
-                generateEnumSuperConstructorCall(irBlockBody, ktClassOrObject)
-            }
+            ClassKind.ENUM_CLASS -> generateEnumSuperConstructorCall(irBlockBody, ktClassOrObject, classDescriptor)
+
             ClassKind.ENUM_ENTRY -> {
-                irBlockBody.statements.add(generateEnumEntrySuperConstructorCall(ktClassOrObject as KtEnumEntry, classDescriptor))
+                irBlockBody.statements.add(
+                    generateEnumEntrySuperConstructorCall(ktClassOrObject as KtEnumEntry, classDescriptor)
+                )
             }
+
             else -> {
                 val statementGenerator = createStatementGenerator()
 
@@ -252,12 +255,17 @@ class BodyGenerator(
         )
     }
 
-    private fun generateEnumSuperConstructorCall(irBlockBody: IrBlockBodyImpl, ktElement: KtElement) {
+    private fun generateEnumSuperConstructorCall(
+        irBlockBody: IrBlockBodyImpl,
+        ktElement: KtElement,
+        classDescriptor: ClassDescriptor
+    ) {
         val enumConstructor = context.builtIns.enum.constructors.single()
         irBlockBody.statements.add(
             IrEnumConstructorCallImpl(
                 ktElement.startOffset, ktElement.endOffset,
-                context.symbolTable.referenceConstructor(enumConstructor)
+                context.symbolTable.referenceConstructor(enumConstructor),
+                mapOf(enumConstructor.typeParameters.single() to classDescriptor.defaultType)
             )
         )
     }
@@ -271,7 +279,8 @@ class BodyGenerator(
             val enumEntryConstructor = enumEntryDescriptor.unsubstitutedPrimaryConstructor!!
             return IrEnumConstructorCallImpl(
                 ktEnumEntry.startOffset, ktEnumEntry.endOffset,
-                context.symbolTable.referenceConstructor(enumEntryConstructor)
+                context.symbolTable.referenceConstructor(enumEntryConstructor),
+                null // enums can't be generic (so far)
             )
         }
 
@@ -302,7 +311,8 @@ class BodyGenerator(
             } ?: throw AssertionError("Enum class $enumClassDescriptor should have a default constructor")
         return IrEnumConstructorCallImpl(
             ktEnumEntry.startOffset, ktEnumEntry.endOffset,
-            context.symbolTable.referenceConstructor(enumClassConstructor)
+            context.symbolTable.referenceConstructor(enumClassConstructor),
+            TODO("// Default enum entry constructor")
         )
     }
 
