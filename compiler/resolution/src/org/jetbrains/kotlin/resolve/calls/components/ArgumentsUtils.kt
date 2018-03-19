@@ -86,6 +86,21 @@ val ValueParameterDescriptor.isActualParameterWithExpectedDefault: Boolean
         return false
     }
 
+
+/**
+ * @return `true` iff the parameter has a default value in the corresponding `expect` declaration.
+ */
+fun ValueParameterDescriptor.hasCorrespondingExpectedDefault(): Boolean {
+    val function = containingDeclaration
+    if (function is FunctionDescriptor && function.isActual) {
+        with(ExpectedActualResolver) {
+            val expected = function.findCompatibleExpectedForActual(function.module).firstOrNull()
+            return expected is FunctionDescriptor && expected.valueParameters[index].declaresDefaultValue()
+        }
+    }
+    return false
+}
+
 private fun KotlinCallArgument.isArrayAssignedAsNamedArgumentInAnnotation(
     parameter: ParameterDescriptor,
     languageVersionSettings: LanguageVersionSettings
