@@ -4,58 +4,31 @@
 // FILE: common.kt
 
 expect open class C() {
-    open fun f(p: Int = 1)
-    open fun f2(p1: Int = 1, p2: Int = 2)
-    open fun ff(p1: Int, p2: Int = 2)
-    open fun fff(p1: Int, p2: Int, p3: Int = 3)
-    open fun fffx(p1: Int, p2: Int = 4, p3: Int = 5)
+    open fun f(p: Int = 1) : String
+    open fun f2(p1: Int = 1, p2: Int = 2) : String
+    open fun ff(p1: Int, p2: Int = 2) : String
+    open fun fff(p1: Int, p2: Int, p3: Int = 3) : String
+    open fun fffx(p1: Int, p2: Int = 4, p3: Int = 5) : String
 }
-// FILE: jvm.kt
+// FILE: platform.kt
 
 import kotlin.test.assertEquals
 
-var result = ""
-
 actual open class C {
-    actual open fun f(p: Int) {
-        result += p
-    }
-    actual open fun f2(p1: Int, p2: Int) {
-        result += p1
-        result += p2
-    }
-    actual open fun ff(p1: Int, p2: Int) {
-        result += p1
-        result += p2
-    }
-    actual open fun fff(p1: Int, p2: Int, p3: Int) {
-        result += p1
-        result += p2
-        result += p3
-    }
-    actual open fun fffx(p1: Int, p2: Int, p3: Int) {
-        result += p1
-        result += p2
-        result += p3
-    }
+    actual open fun f(p: Int) =  "f" + p
+    actual open fun f2(p1: Int, p2: Int) = "f2" + p1 + "" + p2
+    actual open fun ff(p1: Int, p2: Int) = "ff" + p1 + "" + p2
+    actual open fun fff(p1: Int, p2: Int, p3: Int) = "fff" + p1 + "" + p2 + "" + p3
+    actual open fun fffx(p1: Int, p2: Int, p3: Int) = "fffx" + p1 + "" + p2 + "" + p3
 }
 
 fun box(): String {
 
-    C().f()
-    assertEquals("1", result)
-
-    C().f2()
-    assertEquals("112", result)
-
-    C().ff(1)
-    assertEquals("11212", result)
-
-    C().fff(1, 2)
-    assertEquals("11212123", result)
-
-    C().fffx(3)
-    assertEquals("11212123345", result)
+    assertEquals("f1", C().f())
+    assertEquals("f212", C().f2())
+    assertEquals("ff12", C().ff(1))
+    assertEquals("fff123", C().fff(1, 2))
+    assertEquals("fffx345", C().fffx(3))
 
     return "OK"
 }

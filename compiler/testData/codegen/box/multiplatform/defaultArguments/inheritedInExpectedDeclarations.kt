@@ -4,44 +4,31 @@
 // FILE: common.kt
 
 expect open class A() {
-    open fun f(p: Int = 1)
+    open fun f(p: Int = 1) : String
 }
 
 expect open class B : A {
-    override open fun f(p: Int)
+    override open fun f(p: Int) : String
 }
 
-// FILE: jvm.kt
+// FILE: platform.kt
 
 import kotlin.test.assertEquals
 
-var result = ""
-
 actual open class A {
-    actual open fun f(p: Int) {
-        result += p
-    }
+    actual open fun f(p: Int) = "A" + p
 }
 
 actual open class B : A() {
-    actual override open fun f(p: Int) {
-        result += p
-    }
+    actual override open fun f(p: Int) = "B" + p
 }
 
 fun box(): String {
 
-    A().f()
-    assertEquals("1", result)
-
-    A().f(9)
-    assertEquals("19", result)
-
-    B().f()
-    assertEquals("191", result)
-
-    B().f(5)
-    assertEquals("1915", result)
+    assertEquals("A1", A().f())
+    assertEquals("A9", A().f(9))
+    assertEquals("B1", B().f())
+    assertEquals("B5", B().f(5))
 
     return "OK"
 }
