@@ -28,8 +28,8 @@ import org.jetbrains.kotlin.js.translate.utils.BindingUtils.getClassDescriptor
 import org.jetbrains.kotlin.js.translate.utils.JsAstUtils.pureFqn
 import org.jetbrains.kotlin.js.translate.utils.JsDescriptorUtils.getSupertypesWithoutFakes
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.resolve.calls.components.hasCorrespondingExpectedDefault
 import org.jetbrains.kotlin.resolve.calls.components.hasDefaultValue
+import org.jetbrains.kotlin.resolve.calls.components.isActualParameterWithCorrespondingExpectedDefault
 import org.jetbrains.kotlin.resolve.descriptorUtil.hasOwnParametersWithDefaultValue
 
 class DeclarationBodyVisitor(
@@ -113,7 +113,7 @@ class DeclarationBodyVisitor(
 
     private fun hasParametersWithDefaultValue(descriptor: FunctionDescriptor) = descriptor.valueParameters.any { it.hasDefaultValue() }
     private fun hasCorrespondingExpectParametersWithDefaultValue(descriptor: FunctionDescriptor) =
-        descriptor.valueParameters.any { it.hasCorrespondingExpectedDefault() }
+        descriptor.valueParameters.any { it.isActualParameterWithCorrespondingExpectedDefault }
 
     override fun addFunction(descriptor: FunctionDescriptor, expression: JsExpression?, psi: KtElement?) {
         if (!hasParametersWithDefaultValue(descriptor) || !descriptor.isOverridableOrOverrides) {
